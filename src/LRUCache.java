@@ -41,6 +41,7 @@ public class LRUCache extends GenericCache {
 				//else if (operation == 'r'); //just here to allow the if not r|w then error
 				//else
 					//throw new IllegalArgumentException("Invalid operation!!!");
+				System.out.println("");
 				return true;
 			}
 		}
@@ -66,6 +67,7 @@ public class LRUCache extends GenericCache {
 				else if (operation == 'r'); //if read, doesn't affect dirty
 				else
 					throw new IllegalArgumentException("Invalid operation!!!");
+				System.out.println("");
 				return true;
 			}
 		}
@@ -87,6 +89,7 @@ public class LRUCache extends GenericCache {
 				else
 					throw new IllegalArgumentException();
 				cache[index][j].counter = getMax(cache[index])+1; //after replacing, set it's counter higher
+				System.out.println("");
 				return true;
 			}
 		}

@@ -36,8 +36,7 @@ public abstract class GenericCache {
 		System.out.println("Operation:" + operation);
 		if (tag_width == 0){
 			address_width = address.trim().length()*4;
-			tag_width = address_width -offset_width - index_width;
-			
+			tag_width = address_width -offset_width - index_width;	
 		}
 		System.out.println("This is tag width: " + tag_width );
 		handleTransaction(address,operation);
