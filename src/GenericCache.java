@@ -25,20 +25,20 @@ public abstract class GenericCache {
 			}
 		}
 		//
-		System.out.println(inclusion);
 		System.out.println("Number sets: " + numSets);
 		System.out.println("Number ways: " + numWays);
 		System.out.println("Index width: " + index_width);
 		System.out.println("Offset width: " + offset_width);
-		Thread.sleep(3000);
+		System.out.println("");
+		Thread.sleep(1000);
 	}
 	public void feed(String address, char operation) throws InterruptedException{
-		System.out.println("Operation:" + operation);
+		//System.out.println("Operation:" + operation);
 		if (tag_width == 0){
 			address_width = address.trim().length()*4;
 			tag_width = address_width -offset_width - index_width;	
 		}
-		System.out.println("This is tag width: " + tag_width );
+		//System.out.println("This is tag width: " + tag_width );
 		handleTransaction(address,operation);
 	}
 	

@@ -27,20 +27,30 @@ public class sim_cache {
 		int INCLUSION = Integer.parseInt(args[6]);
 		String Tracefile = args[7];
 		//end of this
+		Tracefile = "/home/isaiah/workspace/Cache Project/src/MCF.t";
 		FileReader fr = new FileReader(Tracefile);
 		BufferedReader br = new BufferedReader(fr);
 		String temp = "";
 		int reads = 0;
 		int writes = 0;
+		GenericCache L1 = null;
 		//cache parameters
-		LRUCache L1 = new LRUCache(BLOCKSIZE, L1_SIZE, L1_ASSOC, REPL_POLICY, INCLUSION);
-		
+		if(REPL_POLICY == LRU)
+			L1 = new LRUCache(BLOCKSIZE, L1_SIZE, L1_ASSOC, REPL_POLICY, INCLUSION);
+		else if (REPL_POLICY == FIFO)
+			L1 = new FIFOCache(BLOCKSIZE,L1_SIZE, L1_ASSOC, REPL_POLICY, INCLUSION);
+		else if (REPL_POLICY == pseudoLRU)
+			L1 = new psuedoLRUCache(BLOCKSIZE,L1_SIZE, L1_ASSOC, REPL_POLICY, INCLUSION);
+		else if (REPL_POLICY == OPTIMAL)
+			L1 = new optimalCache(BLOCKSIZE,L1_SIZE, L1_ASSOC, REPL_POLICY, INCLUSION);
+		else
+			throw new IllegalArgumentException("Invalid replacement policy given!");
 		//end initiate cache
 		while(true){
-			System.out.println(temp);
 			temp = br.readLine();
 			if(temp == null)
 				break;
+			//System.out.println(temp);
 			//feed into cache
 			L1.feed(temp.substring(1), temp.charAt(0));
 			//iterate and count
@@ -51,6 +61,8 @@ public class sim_cache {
 				writes++;
 			}
 			else throw new IllegalArgumentException("ERROR! Got unexpected output!");
+			System.out.println("\n============================================================================================================\n");
+			//Thread.sleep(5000);
 		}
 		// done reading file.. but gotta do the stuff inside
 		System.out.println("DONE!");
