@@ -23,12 +23,13 @@ public class sim_cache {
 		int BLOCKSIZE = Integer.parseInt(args[0]);
 		int L1_SIZE = Integer.parseInt(args[1]);
 		int L1_ASSOC = Integer.parseInt(args[2]);
+		int L2_SIZE = Integer.parseInt(args[3]);
+		int L2_ASSOC = Integer.parseInt(args[4]);
 		int REPL_POLICY = Integer.parseInt(args[5]);
 		int INCLUSION = Integer.parseInt(args[6]);
 		String Tracefile = args[7];
 		//end of this
-		Tracefile = "/home/isaiah/workspace/Cache Project/src/MCF.t";
-		FileReader fr = new FileReader(Tracefile);
+		FileReader fr = new FileReader("/home/isaiah/workspace/Cache Project/src/" +Tracefile);
 		BufferedReader br = new BufferedReader(fr);
 		String temp = "";
 		int reads = 0;
@@ -48,12 +49,9 @@ public class sim_cache {
 		//end initiate cache
 		while(true){
 			temp = br.readLine();
-			if(temp == null)
-				break;
-			//System.out.println(temp);
-			//feed into cache
+			if(temp == null) break;
 			L1.feed(temp.substring(1), temp.charAt(0));
-			//iterate and count
+			
 			if (temp.charAt(0) == 'r'){
 				reads++;
 			}
@@ -61,13 +59,64 @@ public class sim_cache {
 				writes++;
 			}
 			else throw new IllegalArgumentException("ERROR! Got unexpected output!");
-			System.out.println("\n============================================================================================================\n");
-			//Thread.sleep(5000);
+			//System.out.println("\n============================================================================================================\n");
+			//Thread.sleep(4000);
 		}
 		// done reading file.. but gotta do the stuff inside
-		System.out.println("DONE!");
-		System.out.println("Reads: " + reads + "\nWrites: " + writes);
-		System.out.println(L1);
+		int totalWriteBacks = L1.getWritebacks();
+		int totalReadMisses = L1.getReadMisses();
+		int totalWriteMisses = L1.getWriteMisses();
+		double missRate = (double)(totalReadMisses + totalWriteMisses)/(double)(reads + writes);
+		int totalMemTraffic = (totalReadMisses + totalWriteBacks + totalWriteMisses);
+		System.out.println("===== Simulator configuration =====\n");
+		System.out.println("BLOCKSIZE:             " + BLOCKSIZE);
+		System.out.println("L1_SIZE:               " + L1_SIZE);
+		System.out.println("L1_ASSOC:              " + L1_ASSOC);
+		System.out.println("L2_SIZE:               " + L2_SIZE);
+		System.out.println("L2_ASSOC:              " + L2_ASSOC);
+		switch(REPL_POLICY){
+		case LRU:
+			System.out.println("REPLACEMENT POLICY:    LRU");
+			break;
+		case FIFO:
+			System.out.println("REPLACEMENT POLICY:    FIFO");
+			break;
+		case pseudoLRU:
+			System.out.println("REPLACEMENT POLICY:    Pseudo");
+			break;
+		case OPTIMAL:
+			System.out.println("REPLACEMENT POLICY:    Optimal");
+			break;
+		}
+		
+		switch(INCLUSION){
+		case INCLUSIVE:
+			System.out.println("INCLUSION PROPERTY:    inclusion");
+			break;
+		case NON_INCLUSIVE:
+			System.out.println("INCLUSION PROPERTY:    non-inclusion");
+			break;
+		case EXCLUSIVE:
+			System.out.println("INCLUSION PROPERTY:    exclusive");
+			break;
+		}
+		
+		System.out.println("trace_file:            " + Tracefile);
+		System.out.println("===== Simulation results (raw) =====");
+		System.out.println("a. number of L1 reads:        " + reads);
+		System.out.println("b. number of L1 read misses:  " + totalReadMisses);
+		System.out.println("c. number of L1 writes:       " + writes);
+		System.out.println("d. number of L1 write misses: " + totalWriteMisses);
+		System.out.println("e. L1 miss rate:              " + missRate);
+		System.out.println("f. number of L1 writebacks:   " + totalWriteBacks);
+		System.out.println("g. number of L2 reads:        0");
+		System.out.println("h. number of L2 read misses:  0");
+		System.out.println("i. number of L2 writes:       0");
+		System.out.println("j. number of L2 write misses: 0");
+		System.out.println("k. L2 miss rate:              0");
+		System.out.println("l. number of L2 writebacks:   0");
+		System.out.println("m. total memory traffic:      " + totalMemTraffic);
+		
 	}
 		
 }

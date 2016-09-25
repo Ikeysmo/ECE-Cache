@@ -9,6 +9,8 @@ public abstract class GenericCache {
 	protected int address_width;
 	protected long address;
 	protected int writebacks = 0;
+	protected int readMisses = 0;
+	protected int writeMisses = 0;
 	protected element[][] cache;
 	
 	public GenericCache(int BLOCKSIZE, int SIZE, int ASSOC, int REPL_POLICY, int INCLUSION) throws InterruptedException{
@@ -19,9 +21,11 @@ public abstract class GenericCache {
 		offset_width = (int) (Math.log10(BLOCKSIZE)/Math.log10(2));
 		cache = new element[numSets][numWays];
 		//initialize cache
-		for(int j = 0; j < cache.length; j++){
-			for(int x = 0; x < cache[j].length; x++){
-				cache[j][x] = new element();
+		if(REPL_POLICY != sim_cache.pseudoLRU){ //don't initialize pointer if unneeded!
+			for(int j = 0; j < cache.length; j++){
+				for(int x = 0; x < cache[j].length; x++){
+					cache[j][x] = new element();
+				}
 			}
 		}
 		//
@@ -45,8 +49,15 @@ public abstract class GenericCache {
 	public abstract void handleTransaction(String address, char operation);
 	
 	public String toString(){
-		//print the results to std out
 		return "This is contents\nWriteback: " + writebacks;
 	}
-
+	public int getWritebacks(){
+		return writebacks;
+	}
+	public int getReadMisses(){
+		return readMisses;
+	}
+	public int getWriteMisses(){
+		return writeMisses;
+	}
 }

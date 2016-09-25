@@ -64,6 +64,10 @@ public class LRUCache extends GenericCache {
 				return true;
 			}
 		}
+		if(operation == 'w')
+			writeMisses++;
+		else if(operation == 'r')
+			readMisses++;
 		return false;
 	}
 
